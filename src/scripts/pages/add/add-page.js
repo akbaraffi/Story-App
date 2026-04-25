@@ -166,7 +166,7 @@ export default class AddPage {
       ctx.drawImage(video, 0, 0);
 
       preview.src = canvas.toDataURL("image/jpeg");
-      preview.style.display = "block";
+      preview.classList.remove("d-none");
       previewLabel.classList.remove("d-none");
 
       canvas.toBlob((blob) => {
@@ -179,7 +179,7 @@ export default class AddPage {
       if (file) {
         photoBlob = file;
         preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
+        preview.classList.remove("d-none");
         previewLabel.classList.remove("d-none");
       }
     });

@@ -48,7 +48,7 @@ export default class LoginPage {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      document.getElementById("error-message").style.display = "none";
+      document.getElementById("error-message").classList.add("d-none");
 
       this.#presenter.login(email, password);
     });
@@ -57,6 +57,6 @@ export default class LoginPage {
   showError(message) {
     const errorContainer = document.getElementById("error-message");
     errorContainer.innerText = message;
-    errorContainer.style.display = "block";
+    errorContainer.classList.remove("d-none");
   }
 }

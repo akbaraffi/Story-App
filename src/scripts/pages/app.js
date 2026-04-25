@@ -1,6 +1,11 @@
 import routes from "../routes/routes";
 import { getActiveRoute } from "../routes/url-parser";
 import { transitionHelper } from "../utils";
+import {
+  isCurrentPushSubscriptionAvailable,
+  subscribe,
+  unsubscribe,
+} from "../utils/notification-helper";
 
 class App {
   #content = null;
@@ -14,6 +19,40 @@ class App {
 
     this.#setupDrawer();
     this.#setupAuthNav();
+  }
+
+  async setupPushNotification() {
+    if (!("serviceWorker" in navigator)) return;
+    const tools = document.getElementById("push-notification-tools");
+    if (!tools) return;
+
+    let isSubscribed = false;
+    try {
+      isSubscribed = await isCurrentPushSubscriptionAvailable();
+    } catch (e) {
+      console.warn("Failed to check push subscription status:", e);
+    }
+
+    if (isSubscribed) {
+      tools.innerHTML = `<button id="unsubscribe-button" class="push-btn-white">Unsubscribe <i class="fa-solid fa-bell-slash"></i></button>`;
+      document
+        .getElementById("unsubscribe-button")
+        .addEventListener("click", () => {
+          unsubscribe().finally(() => {
+            this.setupPushNotification();
+          });
+        });
+      return;
+    }
+
+    tools.innerHTML = `<button id="subscribe-button" class="push-btn-white">Subscribe <i class="fa-solid fa-bell"></i></button>`;
+    document
+      .getElementById("subscribe-button")
+      .addEventListener("click", () => {
+        subscribe().finally(() => {
+          this.setupPushNotification();
+        });
+      });
   }
 
   #setupAuthNav() {
@@ -50,6 +89,12 @@ class App {
 
   async renderPage() {
     this._updateAuthVisibility();
+
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      this.setupPushNotification();
+    }
+
     const url = getActiveRoute();
     const route = routes[url];
 
@@ -79,15 +124,21 @@ class App {
     const loginMenu = document.getElementById("login-menu");
     const logoutMenu = document.getElementById("logout-menu");
     const addMenu = document.getElementById("add-menu");
+    const pushMenu = document.getElementById("push-notification-tools");
+    const bookmarkMenu = document.getElementById("bookmark-menu");
 
     if (token) {
-      if (loginMenu) loginMenu.style.display = "none";
-      if (logoutMenu) logoutMenu.style.display = "block";
-      if (addMenu) addMenu.style.display = "block";
+      if (loginMenu) loginMenu.classList.add("d-none");
+      if (logoutMenu) logoutMenu.classList.remove("d-none");
+      if (addMenu) addMenu.classList.remove("d-none");
+      if (pushMenu) pushMenu.classList.remove("d-none");
+      if (bookmarkMenu) bookmarkMenu.classList.remove("d-none");
     } else {
-      if (loginMenu) loginMenu.style.display = "block";
-      if (logoutMenu) logoutMenu.style.display = "none";
-      if (addMenu) addMenu.style.display = "none";
+      if (loginMenu) loginMenu.classList.remove("d-none");
+      if (logoutMenu) logoutMenu.classList.add("d-none");
+      if (addMenu) addMenu.classList.add("d-none");
+      if (pushMenu) pushMenu.classList.add("d-none");
+      if (bookmarkMenu) bookmarkMenu.classList.add("d-none");
     }
   }
 }

@@ -1,3 +1,5 @@
+import Database from "../../data/database";
+
 export default class AddPresenter {
   #view;
   #model;
@@ -8,11 +10,17 @@ export default class AddPresenter {
   }
 
   async addStory(formData) {
-    try {
-      const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
 
-      if (!token) {
-        window.location.hash = "#/login";
+    if (!token) {
+      window.location.hash = "#/login";
+      return;
+    }
+
+    try {
+      // Check if online
+      if (!navigator.onLine) {
+        await this._saveToSync(formData, token);
         return;
       }
 
@@ -26,8 +34,39 @@ export default class AddPresenter {
         );
       }
     } catch (error) {
-      console.error(error);
-      this.#view.showError("Terjadi kesalahan sistem saat mengirim data.");
+      console.error("Network error, saving for sync:", error);
+      await this._saveToSync(formData, token);
+    }
+  }
+
+  async _saveToSync(formData, token) {
+    try {
+      const storyData = {
+        description: formData.get("description"),
+        photo: formData.get("photo"), // This is a Blob/File
+        lat: parseFloat(formData.get("lat")),
+        lon: parseFloat(formData.get("lon")),
+        token: token,
+        createdAt: new Date().toISOString(),
+      };
+
+      await Database.putSyncStory(storyData);
+
+      if ("serviceWorker" in navigator && "SyncManager" in window) {
+        const registration = await navigator.serviceWorker.ready;
+        try {
+          await registration.sync.register("sync-new-story");
+        } catch (err) {
+          console.warn("Background sync registration failed:", err);
+        }
+      }
+
+      this.#view.showSuccess(
+        "Koneksi terputus. Cerita kamu disimpan dan akan otomatis dikirim saat online! 📶✨",
+      );
+    } catch (err) {
+      console.error("Failed to save to sync storage:", err);
+      this.#view.showError("Gagal menyimpan data offline.");
     }
   }
 }

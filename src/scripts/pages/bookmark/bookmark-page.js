@@ -1,6 +1,6 @@
-import { getAllStories } from "../../data/api";
+import BookmarkPresenter from "./bookmark-presenter";
 import { showFormattedDate } from "../../utils/index";
-import HomePresenter from "./home-presenter";
+import Database from "../../data/database";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -14,22 +14,18 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-export default class HomePage {
+export default class BookmarkPage {
   #presenter;
+  #map = null;
 
   async render() {
     return `
-      <section class="container home-section">
-        <h2 class="home-title">Lokasi Cerita</h2>
-        
-        <div id="map-container" class="map-container"></div>
-        
-        <div class="add-story-container">
-          <a href="#/add" class="btn-basic">+ Tambah Cerita</a>
-        </div>
-        
-        <h2 class="story-section-title">Cerita Terbaru</h2>
-        <div id="story-list" class="story-list">
+      <section class="container bookmark-section">
+        <h2 class="bookmark-title">Lokasi Cerita Tersimpan</h2>
+        <div id="bookmark-map" class="map-container"></div>
+
+        <h2 class="story-section-title" style="margin-top: 40px;">Cerita Tersimpan</h2>
+        <div id="bookmark-list" class="story-list">
           <p class="empty-message">Memuat data...</p>
         </div>
       </section>
@@ -37,27 +33,19 @@ export default class HomePage {
   }
 
   async afterRender() {
-    document.title = "Beranda - Story App";
+    document.title = "Cerita Tersimpan - Story App";
 
-    this.#presenter = new HomePresenter({
+    this.#presenter = new BookmarkPresenter({
       view: this,
-      model: { getAllStories },
+      model: Database,
     });
 
-    this.#presenter.loadStories();
+    this._initMap();
+    await this.#presenter.loadBookmarks();
   }
 
-  displayStories(stories) {
-    const storyListContainer = document.getElementById("story-list");
-    storyListContainer.innerHTML = "";
-
-    if (stories.length === 0) {
-      storyListContainer.innerHTML =
-        '<p class="empty-message">Belum ada cerita yang dibagikan.</p>';
-      return;
-    }
-
-    const map = L.map("map-container").setView([-2.548926, 118.0148634], 5);
+  _initMap() {
+    this.#map = L.map("bookmark-map").setView([-2.548926, 118.0148634], 5);
 
     const osmLayer = L.tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -74,19 +62,37 @@ export default class HomePage {
       },
     );
 
-    osmLayer.addTo(map);
+    osmLayer.addTo(this.#map);
 
     const baseMaps = {
       OpenStreetMap: osmLayer,
       Topografi: topoLayer,
     };
-    L.control.layers(baseMaps).addTo(map);
+    L.control.layers(baseMaps).addTo(this.#map);
+  }
+
+  displayBookmarks(stories) {
+    const container = document.getElementById("bookmark-list");
+
+    if (this.#map) {
+      this.#map.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          this.#map.removeLayer(layer);
+        }
+      });
+    }
+
+    if (stories.length === 0) {
+      container.innerHTML = `<p class="bookmark-empty">Belum ada cerita yang disimpan.</p>`;
+      return;
+    }
+
+    container.innerHTML = "";
 
     stories.forEach((story) => {
       let marker = null;
-      if (story.lat && story.lon) {
-        marker = L.marker([story.lat, story.lon]).addTo(map);
-
+      if (this.#map && story.lat && story.lon) {
+        marker = L.marker([story.lat, story.lon]).addTo(this.#map);
         marker.bindPopup(`
           <div class="popup-container">
             <img src="${story.photoUrl}" alt="Foto ${story.name}" class="popup-image">
@@ -95,45 +101,46 @@ export default class HomePage {
         `);
       }
 
-      const storyCard = document.createElement("article");
-      storyCard.classList.add("story-card");
+      const dateStr = showFormattedDate(story.createdAt);
 
-      const shortDescription =
+      const shortDesc =
         story.description.length > 100
           ? story.description.substring(0, 100) + "..."
           : story.description;
 
-      const dateStr = showFormattedDate(story.createdAt);
-
-      storyCard.innerHTML = `
+      const card = document.createElement("article");
+      card.classList.add("story-card");
+      card.innerHTML = `
         <img src="${story.photoUrl}" alt="Foto cerita dari ${story.name}" class="story-card-image">
         <div class="story-card-content">
           <h3 class="story-card-title">${story.name}</h3>
           <p class="story-card-date">${dateStr}</p>
-          <p class="story-card-description">${shortDescription}</p>
-          <button class="btn-basic btn-selengkapnya" data-id="${story.id}">Selengkapnya <i class="fa-solid fa-arrow-right"></i></button>
+          <p class="story-card-description">${shortDesc}</p>
+          <div class="bookmark-card-actions">
+            <button class="btn-basic btn-selengkapnya" data-id="${story.id}">Selengkapnya <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
         </div>
       `;
 
-      storyCard.tabIndex = 0;
-      storyCard.style.cursor = "pointer";
+      card.tabIndex = 0;
+      card.style.cursor = "pointer";
 
       const handleStoryClick = () => {
         if (marker) {
-          map.setView([story.lat, story.lon], 13);
+          this.#map.setView([story.lat, story.lon], 13);
           marker.openPopup();
           window.scrollTo({
-            top: document.getElementById("map-container").offsetTop - 30,
+            top: document.getElementById("bookmark-map").offsetTop - 30,
             behavior: "smooth",
           });
         }
       };
 
-      storyCard.addEventListener("click", (event) => {
+      card.addEventListener("click", (event) => {
         if (event.target.closest(".btn-selengkapnya")) return;
         handleStoryClick();
       });
-      storyCard.addEventListener("keydown", (event) => {
+      card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           if (event.target.closest(".btn-selengkapnya")) return;
           event.preventDefault();
@@ -141,7 +148,7 @@ export default class HomePage {
         }
       });
 
-      const btnDetail = storyCard.querySelector(".btn-selengkapnya");
+      const btnDetail = card.querySelector(".btn-selengkapnya");
       if (btnDetail) {
         btnDetail.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -149,7 +156,7 @@ export default class HomePage {
         });
       }
 
-      storyListContainer.appendChild(storyCard);
+      container.appendChild(card);
     });
   }
 }

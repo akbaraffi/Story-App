@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <meta name="theme-color" content="#000000" />
     <title>CityCare App</title>
 
+    <link rel="manifest" href="/manifest.webmanifest" />
     <script type="module" src="/scripts/index.js"></script>
   </head>
 
@@ -14,18 +21,38 @@
 
     <header>
       <div class="main-header container">
-        <h1 style="margin: 0; font-size: inherit; line-height: 1">
-          <a class="brand-name" href="#/">Story App</a>
+        <h1 class="brand-title">
+          <a class="brand-name" href="#/"
+            ><img
+              src="/images/icons/icon-48x48.png"
+              alt="Story App Logo"
+              class="brand-logo"
+            />
+            Story App</a
+          >
         </h1>
 
         <nav id="navigation-drawer" class="navigation-drawer">
           <ul id="nav-list" class="nav-list">
             <li><a href="#/">Beranda</a></li>
             <li id="add-menu"><a href="#/add">Tambah Cerita</a></li>
-            <li><a href="#/about">About</a></li>
-            <li id="login-menu"><a href="#/login">Login</a></li>
+            <li id="bookmark-menu" class="d-none">
+              <a href="#/bookmark">Cerita Tersimpan</a>
+            </li>
+            <li><a href="#/about">Tentang</a></li>
+            <li
+              id="push-notification-tools"
+              class="d-none push-tool-container"
+            ></li>
+            <li id="login-menu">
+              <a href="#/login"
+                ><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a
+              >
+            </li>
             <li id="logout-menu" class="d-none">
-              <a href="javascript:void(0)" id="logout-button">Logout</a>
+              <a href="javascript:void(0)" id="logout-button"
+                ><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a
+              >
             </li>
           </ul>
         </nav>
