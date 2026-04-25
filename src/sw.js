@@ -71,24 +71,34 @@ registerRoute(
 
 self.addEventListener("push", (event) => {
   async function chainPromise() {
-    let data = {
+    let eventData = {
       title: "Story App",
       options: { body: "Notifikasi baru!" },
     };
 
     try {
       if (event.data) {
-        data = await event.data.json();
+        eventData = await event.data.json();
       }
     } catch (err) {}
 
     const options = {
-      ...data.options,
-      icon: data.options?.icon || `${self.registration.scope}favicon.png`,
-      data: data.data || {},
+      body: eventData.options?.body || "Anda memiliki notifikasi baru",
+      icon: eventData.options?.icon || `${self.registration.scope}favicon.png`,
+      data: eventData.options?.data || eventData.data || {},
+      actions: [
+        {
+          action: "view",
+          title: "Lihat Cerita",
+        },
+        {
+          action: "close",
+          title: "Tutup",
+        },
+      ],
     };
 
-    await self.registration.showNotification(data.title, options);
+    await self.registration.showNotification(eventData.title, options);
   }
 
   event.waitUntil(chainPromise());
@@ -97,11 +107,17 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
+  if (event.action === "close") return;
+
   const notificationData = event.notification.data;
   let urlToOpen = self.registration.scope;
 
-  if (notificationData && notificationData.id) {
-    urlToOpen = `${self.registration.scope}#/detail/${notificationData.id}`;
+  if (
+    notificationData &&
+    (notificationData.id || notificationData["id-story"])
+  ) {
+    const id = notificationData.id || notificationData["id-story"];
+    urlToOpen = `${self.registration.scope}#/detail/${id}`;
   }
 
   event.waitUntil(
@@ -161,7 +177,7 @@ async function processSyncStories() {
         await db.delete("sync-stories", story.id);
 
         self.registration.showNotification("Story App", {
-          body: "Cerita offline kamu berhasil terkirim! 🚀",
+          body: "Cerita offline kamu berhasil terkirim!",
           icon: `${self.registration.scope}favicon.png`,
           vibrate: [100, 50, 100],
           data: { id: result.id || "" },

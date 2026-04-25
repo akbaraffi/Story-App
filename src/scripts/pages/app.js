@@ -6,6 +6,7 @@ import {
   subscribe,
   unsubscribe,
 } from "../utils/notification-helper";
+import NotFoundPage from "./not-found/not-found-page";
 
 class App {
   #content = null;
@@ -94,12 +95,7 @@ class App {
     }
 
     const url = getActiveRoute();
-    const route = routes[url];
-
-    if (!route) {
-      this.#content.innerHTML = "<h2>Halaman tidak ditemukan</h2>";
-      return;
-    }
+    const route = routes[url] || (() => new NotFoundPage());
 
     const publicRoutes = ["/login", "/register", "/about"];
     if (!publicRoutes.includes(url) && !token) {

@@ -16,7 +16,9 @@ export default class RegisterPresenter {
       });
 
       if (!response.error) {
-        window.location.hash = "#/login";
+        this.#view.showSuccess(
+          "Akun Anda berhasil didaftarkan! Silakan login untuk melanjutkan.",
+        );
       } else {
         this.#view.showError(response.message);
       }

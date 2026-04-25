@@ -12,7 +12,7 @@ export default class LoginPresenter {
       const response = await this.#model.loginUser({ email, password });
       if (!response.error) {
         sessionStorage.setItem("token", response.loginResult.token);
-        window.location.hash = "#/";
+        this.#view.showSuccess("Selamat datang kembali!");
       } else {
         this.#view.showError(response.message);
       }

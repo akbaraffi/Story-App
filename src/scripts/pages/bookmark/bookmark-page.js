@@ -24,7 +24,20 @@ export default class BookmarkPage {
         <h2 class="bookmark-title">Lokasi Cerita Tersimpan</h2>
         <div id="bookmark-map" class="map-container"></div>
 
-        <h2 class="story-section-title" style="margin-top: 40px;">Cerita Tersimpan</h2>
+        <div class="bookmark-controls">
+          <div class="search-container">
+            <input type="text" id="search-input" placeholder="Cari cerita berdasarkan nama atau deskripsi..." class="input-basic">
+          </div>
+          <div class="sort-container">
+            <select id="sort-select" class="input-basic">
+              <option value="newest">Terbaru</option>
+              <option value="oldest">Terlama</option>
+              <option value="name-asc">Nama (A-Z)</option>
+              <option value="name-desc">Nama (Z-A)</option>
+            </select>
+          </div>
+        </div>
+        <h2 class="story-section-title bookmark-list-title">Cerita Tersimpan</h2>
         <div id="bookmark-list" class="story-list">
           <p class="empty-message">Memuat data...</p>
         </div>
@@ -42,6 +55,17 @@ export default class BookmarkPage {
 
     this._initMap();
     await this.#presenter.loadBookmarks();
+
+    const searchInput = document.getElementById("search-input");
+    const sortSelect = document.getElementById("sort-select");
+
+    searchInput.addEventListener("input", (event) => {
+      this.#presenter.searchBookmarks(event.target.value);
+    });
+
+    sortSelect.addEventListener("change", (event) => {
+      this.#presenter.sortBookmarks(event.target.value);
+    });
   }
 
   _initMap() {

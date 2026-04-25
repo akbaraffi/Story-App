@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import AddPresenter from "./add-presenter";
 import { addNewStory } from "../../data/api";
 import * as L from "leaflet";
@@ -113,9 +114,11 @@ export default class AddPage {
       select.addEventListener("change", () => this._startStream(select.value));
     } catch (error) {
       console.error("Gagal mengakses kamera:", error);
-      alert(
-        "Tidak bisa mengakses kamera. Pastikan kamu memberikan izin di browser.",
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Kamera Gagal",
+        text: "Tidak bisa mengakses kamera. Pastikan kamu memberikan izin di browser.",
+      });
     }
   }
 
@@ -237,7 +240,13 @@ export default class AddPage {
 
   showSuccess(message) {
     document.getElementById("btn-submit").innerText = "Kirim Cerita";
-    alert(message);
-    window.location.hash = "#/";
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: message,
+      confirmButtonText: "OK",
+    }).then(() => {
+      window.location.hash = "#/";
+    });
   }
 }

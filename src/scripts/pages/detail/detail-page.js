@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import DetailPresenter from "./detail-presenter";
 import { showFormattedDate } from "../../utils/index";
 import { getStoryById } from "../../data/api";
@@ -154,10 +155,22 @@ export default class DetailPage {
   }
 
   saveSuccess(message) {
-    alert(message);
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: message,
+      timer: 1500,
+      showConfirmButton: false,
+    });
   }
 
   removeSuccess(message) {
-    alert(message);
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: message,
+      timer: 1500,
+      showConfirmButton: false,
+    });
   }
 }

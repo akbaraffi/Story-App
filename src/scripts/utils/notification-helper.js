@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { convertBase64ToUint8Array } from "./index";
 import CONFIG from "../config";
 import {
@@ -26,12 +27,20 @@ export async function requestNotificationPermission() {
   const status = await Notification.requestPermission();
 
   if (status === "denied") {
-    alert("Izin notifikasi ditolak.");
+    Swal.fire({
+      icon: "error",
+      title: "Izin Ditolak",
+      text: "Izin notifikasi ditolak.",
+    });
     return false;
   }
 
   if (status === "default") {
-    alert("Izin notifikasi ditutup atau diabaikan.");
+    Swal.fire({
+      icon: "warning",
+      title: "Izin Diabaikan",
+      text: "Izin notifikasi ditutup atau diabaikan.",
+    });
     return false;
   }
 
@@ -61,7 +70,11 @@ export async function subscribe() {
   }
 
   if (await isCurrentPushSubscriptionAvailable()) {
-    alert("Sudah berlangganan push notification.");
+    Swal.fire({
+      icon: "info",
+      title: "Sudah Berlangganan",
+      text: "Sudah berlangganan push notification.",
+    });
     return;
   }
 
@@ -82,7 +95,11 @@ export async function subscribe() {
     const response = await subscribePushNotification({ endpoint, keys });
     if (!response.ok) {
       console.error("subscribe: response:", response);
-      alert(failureSubscribeMessage + " - " + response.message);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: failureSubscribeMessage + " - " + response.message,
+      });
       await pushSubscription.unsubscribe();
       return;
     }
@@ -92,10 +109,20 @@ export async function subscribe() {
       icon: "/favicon.png",
     });
 
-    alert(successSubscribeMessage);
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: successSubscribeMessage,
+      timer: 1500,
+      showConfirmButton: false,
+    });
   } catch (error) {
     console.error("subscribe: error:", error);
-    alert(failureSubscribeMessage + " - " + error.message);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: failureSubscribeMessage + " - " + error.message,
+    });
     if (pushSubscription) {
       await pushSubscription.unsubscribe();
     }
@@ -110,21 +137,31 @@ export async function unsubscribe() {
   try {
     const pushSubscription = await getPushSubscription();
     if (!pushSubscription) {
-      alert(
-        "Tidak bisa memutus langganan push notification karena belum berlangganan sebelumnya.",
-      );
+      Swal.fire({
+        icon: "info",
+        title: "Info",
+        text: "Tidak bisa memutus langganan push notification karena belum berlangganan sebelumnya.",
+      });
       return;
     }
     const { endpoint, keys } = pushSubscription.toJSON();
     const response = await unsubscribePushNotification({ endpoint });
     if (!response.ok) {
-      alert(failureUnsubscribeMessage);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: failureUnsubscribeMessage,
+      });
       console.error("unsubscribe: response:", response);
       return;
     }
     const unsubscribed = await pushSubscription.unsubscribe();
     if (!unsubscribed) {
-      alert(failureUnsubscribeMessage);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: failureUnsubscribeMessage,
+      });
       await subscribePushNotification({ endpoint, keys });
       return;
     }
@@ -135,9 +172,19 @@ export async function unsubscribe() {
       icon: "/favicon.png",
     });
 
-    alert(successUnsubscribeMessage);
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: successUnsubscribeMessage,
+      timer: 1500,
+      showConfirmButton: false,
+    });
   } catch (error) {
-    alert(failureUnsubscribeMessage);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: failureUnsubscribeMessage,
+    });
     console.error("unsubscribe: error:", error);
   }
 }

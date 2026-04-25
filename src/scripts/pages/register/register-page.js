@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { registerUser } from "../../data/api";
 import RegisterPresenter from "./register-presenter";
 
@@ -64,5 +65,16 @@ export default class RegisterPage {
     const errorContainer = document.getElementById("error-message");
     errorContainer.innerText = message;
     errorContainer.classList.remove("d-none");
+  }
+
+  showSuccess(message) {
+    Swal.fire({
+      icon: "success",
+      title: "Pendaftaran Berhasil",
+      text: message,
+      confirmButtonText: "Ke Halaman Login",
+    }).then(() => {
+      window.location.hash = "#/login";
+    });
   }
 }

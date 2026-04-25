@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { loginUser } from "../../data/api";
 import LoginPresenter from "./login-presenter";
 
@@ -58,5 +59,17 @@ export default class LoginPage {
     const errorContainer = document.getElementById("error-message");
     errorContainer.innerText = message;
     errorContainer.classList.remove("d-none");
+  }
+
+  showSuccess(message) {
+    Swal.fire({
+      icon: "success",
+      title: "Login Berhasil",
+      text: message,
+      timer: 1500,
+      showConfirmButton: false,
+    }).then(() => {
+      window.location.hash = "#/";
+    });
   }
 }
