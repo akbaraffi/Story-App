@@ -15,10 +15,7 @@ export default class HomePresenter {
       if (!response.error) {
         this.#view.displayStories(response.listStory);
       } else {
-        console.error(response.message);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   }
 }

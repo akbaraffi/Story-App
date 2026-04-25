@@ -1,6 +1,5 @@
 export async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) {
-    console.log("Service Worker API unsupported");
     return;
   }
 
@@ -11,8 +10,5 @@ export async function registerServiceWorker() {
         type: import.meta.env.DEV ? "module" : "classic",
       },
     );
-    console.log("Service worker telah terpasang", registration);
-  } catch (error) {
-    console.log("Failed to install service worker:", error);
-  }
+  } catch (error) {}
 }

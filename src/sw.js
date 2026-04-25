@@ -70,8 +70,6 @@ registerRoute(
 );
 
 self.addEventListener("push", (event) => {
-  console.log("Service worker pushing...");
-
   async function chainPromise() {
     let data = {
       title: "Story App",
@@ -82,9 +80,7 @@ self.addEventListener("push", (event) => {
       if (event.data) {
         data = await event.data.json();
       }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
 
     const options = {
       ...data.options,

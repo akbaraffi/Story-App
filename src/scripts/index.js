@@ -1,4 +1,3 @@
-// CSS imports
 import "../styles/styles.css";
 
 import App from "./pages/app";
@@ -21,10 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     await app.renderPage();
   });
 
-  // Render initial page
   await app.renderPage();
 
-  // Initialize PWA features without blocking UI
   registerServiceWorker();
   app.setupPushNotification();
 });

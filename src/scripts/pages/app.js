@@ -29,9 +29,7 @@ class App {
     let isSubscribed = false;
     try {
       isSubscribed = await isCurrentPushSubscriptionAvailable();
-    } catch (e) {
-      console.warn("Failed to check push subscription status:", e);
-    }
+    } catch (e) {}
 
     if (isSubscribed) {
       tools.innerHTML = `<button id="unsubscribe-button" class="push-btn-white">Unsubscribe <i class="fa-solid fa-bell-slash"></i></button>`;
@@ -103,7 +101,6 @@ class App {
       return;
     }
 
-    // Protection logic
     const publicRoutes = ["/login", "/register", "/about"];
     if (!publicRoutes.includes(url) && !token) {
       window.location.hash = "#/login";

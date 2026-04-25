@@ -18,7 +18,6 @@ export default class LoginPresenter {
       }
     } catch (error) {
       this.#view.showError("Terjadi kesalahan pada sistem. Silakan coba lagi.");
-      console.error(error);
     }
   }
 }

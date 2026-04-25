@@ -13,7 +13,6 @@ export default class AddPresenter {
     const token = sessionStorage.getItem("token");
 
     try {
-      // Check if online
       if (!navigator.onLine) {
         await this._saveToSync(formData, token);
         return;
@@ -38,7 +37,7 @@ export default class AddPresenter {
     try {
       const storyData = {
         description: formData.get("description"),
-        photo: formData.get("photo"), // This is a Blob/File
+        photo: formData.get("photo"),
         lat: parseFloat(formData.get("lat")),
         lon: parseFloat(formData.get("lon")),
         token: token,
