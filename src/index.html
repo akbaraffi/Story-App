@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    <title>CityCare App</title>
+
+    <script type="module" src="/scripts/index.js"></script>
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-to-content">Lompat ke konten utama</a>
+
+    <header>
+      <div class="main-header container">
+        <h1 style="margin: 0; font-size: inherit; line-height: 1">
+          <a class="brand-name" href="#/">Story App</a>
+        </h1>
+
+        <nav id="navigation-drawer" class="navigation-drawer">
+          <ul id="nav-list" class="nav-list">
+            <li><a href="#/">Beranda</a></li>
+            <li id="add-menu"><a href="#/add">Tambah Cerita</a></li>
+            <li><a href="#/about">About</a></li>
+            <li id="login-menu"><a href="#/login">Login</a></li>
+            <li id="logout-menu" class="d-none">
+              <a href="javascript:void(0)" id="logout-button">Logout</a>
+            </li>
+          </ul>
+        </nav>
+
+        <button
+          id="drawer-button"
+          class="drawer-button"
+          aria-label="Buka menu navigasi"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content" tabindex="-1"></main>
+
+    <footer>
+      <p>@ <span id="year"></span> Made By Akbar</p>
+    </footer>
+  </body>
+</html>

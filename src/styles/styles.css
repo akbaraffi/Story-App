@@ -1,0 +1,528 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  padding-inline: 32px;
+  margin-inline: auto;
+  max-width: 1300px;
+}
+
+header {
+  background-color: black;
+  view-transition-name: header;
+  position: relative;
+  z-index: 99999;
+}
+
+.main-header {
+  min-height: 90px;
+  padding-block: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.brand-name {
+  font-size: 1.125rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.navigation-drawer {
+  min-height: 100vh;
+  width: 200px;
+  padding: 20px 10px;
+  background-color: black;
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  box-shadow: 0 0 4px 2px gray;
+  transform: translateX(-100%);
+  transition: transform 350ms;
+  z-index: 9999;
+}
+
+.navigation-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-button {
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  display: inline-block;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px 20px;
+}
+
+.nav-list li a {
+  padding: 6px 10px;
+  display: block;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-list li a:hover {
+  text-decoration: underline;
+}
+
+.main-content {
+  padding-block: 20px;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.form-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px gray;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid gray;
+}
+
+.form-title {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: black;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: blue;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: white;
+  color: black;
+}
+
+.register-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: red;
+  background-color: pink;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.home-section {
+  padding-top: 30px;
+}
+
+.home-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.map-container {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  z-index: 1;
+  border: 1px solid gray;
+}
+
+.story-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.empty-message {
+  text-align: center;
+  width: 100%;
+}
+
+.popup-container {
+  text-align: center;
+}
+
+.popup-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.story-card {
+  border: 1px solid gray;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 8px gray;
+}
+
+.story-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.story-card-content {
+  padding: 16px;
+}
+
+.story-card-title {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.story-card-date {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 12px;
+}
+
+.story-card-description {
+  font-size: 14px;
+  color: black;
+  line-height: 1.5;
+}
+
+.add-section {
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.add-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 6px;
+}
+
+.camera-container {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.camera-video {
+  width: 100%;
+  max-height: 300px;
+  background: black;
+  border-radius: 8px;
+  transform: scaleX(-1);
+}
+
+.camera-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.btn-take-photo {
+  margin-bottom: 15px;
+}
+
+.upload-text {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.file-input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 6px;
+}
+
+.photo-preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid gray;
+}
+
+.add-map {
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  z-index: 1;
+  border: 1px solid gray;
+}
+
+.coordinate-container {
+  display: flex;
+  gap: 10px;
+}
+
+.coordinate-input {
+  flex: 1;
+  padding: 8px;
+  background: lightgray;
+  border-radius: 6px;
+  border: 1px solid gray;
+}
+
+.btn-submit-story {
+  margin-top: 10px;
+}
+
+:focus-visible {
+  outline: 3px dashed black !important;
+  outline-offset: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.skip-to-content {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  color: white;
+  background-color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10000;
+}
+
+.skip-to-content:focus {
+  position: unset !important;
+  clip: auto;
+  height: auto;
+  width: auto;
+  display: block;
+}
+
+nav ul li a:focus,
+.skip-to-content:focus {
+  outline: 3px dashed white;
+  outline-offset: 4px;
+  background-color: red;
+}
+
+@media screen and (min-width: 1024px) {
+  .navigation-drawer {
+    min-height: auto;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    flex-direction: row;
+    justify-content: space-between;
+    position: static;
+    box-shadow: none;
+    transform: translateX(0);
+  }
+
+  .nav-list {
+    flex-direction: row;
+  }
+
+  .nav-list li a {
+    display: inline-block;
+  }
+
+  .drawer-button {
+    display: none;
+  }
+}
+
+@keyframes full-slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes full-slide-to-left {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 400ms ease-out both full-slide-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 400ms ease-out both full-slide-from-right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: black;
+  color: white;
+  margin-top: auto;
+}
+
+.d-none {
+  display: none;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.map-instruction {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.coordinate-label {
+  font-size: 12px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.about-section {
+  padding-top: 30px;
+}
+
+.about-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.about-description {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.story-section-title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+}
+
+.add-story-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.btn-basic {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: black;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 8px;
+  border: 1px solid black;
+  transition: all 0.2s ease;
+}
+
+.btn-basic:hover {
+  background-color: white;
+  color: black;
+}
+
+.photo-preview-label {
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
