@@ -21,7 +21,7 @@ export default class AddPresenter {
       const response = await this.#model.addNewStory(token, formData);
 
       if (!response.error) {
-        this.#view.showSuccess("Yeay! Cerita kamu berhasil diunggah! 🎉");
+        this.#view.showSuccess("Cerita kamu berhasil diunggah!");
       } else {
         this.#view.showError(
           "Gagal mengirim data ke server: " + response.message,
@@ -56,7 +56,7 @@ export default class AddPresenter {
       }
 
       this.#view.showSuccess(
-        "Koneksi terputus. Cerita kamu disimpan dan akan otomatis dikirim saat online! 📶✨",
+        "Koneksi terputus. Cerita kamu disimpan dan akan otomatis dikirim saat online!",
       );
     } catch (err) {
       console.error("Failed to save to sync storage:", err);

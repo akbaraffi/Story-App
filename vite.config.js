@@ -2,9 +2,10 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
+const BASE_URL = process.env.VITE_BASE || "/Story-App/";
+
 export default defineConfig({
-  base: "/Story-App/",
+  base: BASE_URL,
   root: resolve(__dirname, "src"),
   publicDir: resolve(__dirname, "src", "public"),
   build: {
@@ -30,9 +31,9 @@ export default defineConfig({
         type: "module",
       },
       manifest: {
-        id: "/#/",
-        start_url: "/#/",
-        scope: "/",
+        id: BASE_URL,
+        start_url: BASE_URL,
+        scope: BASE_URL,
         name: "Story App",
         short_name: "Story",
         description:
@@ -109,7 +110,7 @@ export default defineConfig({
             name: "Tambah Cerita Baru",
             short_name: "Tambah",
             description: "Membuat cerita baru.",
-            url: "/?source=pwa#/add",
+            url: `${BASE_URL}?source=pwa#/add`,
             icons: [
               {
                 src: "images/icons/icon-96x96.png",

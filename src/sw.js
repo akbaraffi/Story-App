@@ -84,7 +84,7 @@ self.addEventListener("push", (event) => {
 
     const options = {
       ...data.options,
-      icon: data.options?.icon || "/favicon.png",
+      icon: data.options?.icon || `${self.registration.scope}favicon.png`,
       data: data.data || {},
     };
 
@@ -98,10 +98,10 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   const notificationData = event.notification.data;
-  let urlToOpen = "/";
+  let urlToOpen = self.registration.scope;
 
   if (notificationData && notificationData.id) {
-    urlToOpen = `/#/detail/${notificationData.id}`;
+    urlToOpen = `${self.registration.scope}#/detail/${notificationData.id}`;
   }
 
   event.waitUntil(
@@ -114,7 +114,7 @@ self.addEventListener("notificationclick", (event) => {
             client.url.includes(self.registration.scope)
           ) {
             client.focus();
-            if (urlToOpen !== "/") {
+            if (urlToOpen !== self.registration.scope) {
               client.navigate(urlToOpen);
             }
             return;
@@ -162,7 +162,7 @@ async function processSyncStories() {
 
         self.registration.showNotification("Story App", {
           body: "Cerita offline kamu berhasil terkirim! 🚀",
-          icon: "/favicon.png",
+          icon: `${self.registration.scope}favicon.png`,
           vibrate: [100, 50, 100],
           data: { id: result.id || "" },
         });
