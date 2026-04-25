@@ -12,12 +12,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     drawerButton: document.querySelector("#drawer-button"),
     navigationDrawer: document.querySelector("#navigation-drawer"),
   });
-  await app.renderPage();
-
-  await registerServiceWorker();
-  await app.setupPushNotification();
 
   window.addEventListener("hashchange", async () => {
     await app.renderPage();
   });
+
+  window.addEventListener("load", async () => {
+    await app.renderPage();
+  });
+
+  // Render initial page
+  await app.renderPage();
+
+  // Initialize PWA features without blocking UI
+  registerServiceWorker();
+  app.setupPushNotification();
 });

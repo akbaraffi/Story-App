@@ -5,9 +5,12 @@ export async function registerServiceWorker() {
   }
 
   try {
-    const registration = await navigator.serviceWorker.register("/sw.js", {
-      type: import.meta.env.DEV ? "module" : "classic",
-    });
+    const registration = await navigator.serviceWorker.register(
+      `${import.meta.env.BASE_URL}sw.js`,
+      {
+        type: import.meta.env.DEV ? "module" : "classic",
+      },
+    );
     console.log("Service worker telah terpasang", registration);
   } catch (error) {
     console.log("Failed to install service worker:", error);

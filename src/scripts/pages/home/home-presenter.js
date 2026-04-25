@@ -10,12 +10,6 @@ export default class HomePresenter {
   async loadStories() {
     try {
       const token = sessionStorage.getItem("token");
-
-      if (!token) {
-        window.location.hash = "#/login";
-        return;
-      }
-
       const response = await this.#model.getAllStories(token);
 
       if (!response.error) {

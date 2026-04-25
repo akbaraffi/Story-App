@@ -12,11 +12,6 @@ export default class AddPresenter {
   async addStory(formData) {
     const token = sessionStorage.getItem("token");
 
-    if (!token) {
-      window.location.hash = "#/login";
-      return;
-    }
-
     try {
       // Check if online
       if (!navigator.onLine) {

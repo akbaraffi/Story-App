@@ -103,6 +103,13 @@ class App {
       return;
     }
 
+    // Protection logic
+    const publicRoutes = ["/login", "/register", "/about"];
+    if (!publicRoutes.includes(url) && !token) {
+      window.location.hash = "#/login";
+      return;
+    }
+
     const page = route();
 
     const transition = transitionHelper({
